@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { VNodeRef } from "vue";
-
 const length = ref(3);
 const roundLength = ref(5);
 
@@ -45,8 +43,7 @@ function acceptAnswer() {
         }"
       />
     </div>
-    <UButton @click="initialize" v-if="!numbers">Start</UButton>
-    <div v-if="numbers">
+    <div v-if="numbers && result.length < roundLength">
       <div>
         <template v-for="(q, i) in numbers"
           ><span v-if="i !== 0"> * </span>{{ q }}</template
@@ -54,5 +51,6 @@ function acceptAnswer() {
       </div>
       <UInput v-model="answer" type="number" @keypress.enter="acceptAnswer" />
     </div>
+    <UButton @click="initialize" v-else>Start</UButton>
   </div>
 </template>
