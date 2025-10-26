@@ -3,12 +3,13 @@ const length = ref(3);
 const roundLength = ref(5);
 
 const numbers = ref<null | number[]>(null);
-const result = ref([] as boolean[]);
+const result = ref([] as { answer: number; correct: number[] }[]);
 
 const answer = ref("");
 
 function initialize() {
   generateQuestion();
+  result.value = []
 }
 
 function generateQuestion() {
@@ -21,13 +22,17 @@ function generateQuestion() {
 
 function acceptAnswer() {
   if (typeof answer.value !== "number") return;
-  const isCorrect =
-    answer.value === (numbers.value?.reduce((a, b) => a * b) ?? 0);
+  result.value.push({
+    answer: +answer.value,
+    correct: JSON.parse(JSON.stringify(numbers.value)),
+  });
   generateQuestion();
   answer.value = "";
-  result.value.push(isCorrect);
 }
 
+function mul(a: number, b: number) {
+  return a * b
+}
 </script>
 
 <template>
@@ -38,10 +43,12 @@ function acceptAnswer() {
         class="w-5 h-5"
         :class="{
           'bg-gray-400': result[i] === undefined,
-          'bg-red-500': result[i] !== undefined && result[i] !== true,
-          'bg-green-500': result[i] !== undefined && result[i] === true,
+          'bg-red-500':
+            result[i] && result[i].answer !== result[i].correct.reduce(mul),
+          'bg-green-500':
+            result[i] && result[i].answer === result[i].correct.reduce(mul),
         }"
-      />
+      ></div>
     </div>
     <div v-if="numbers && result.length < roundLength">
       <div>
