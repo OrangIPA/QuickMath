@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UHeader title="Quick Games">
+    <UHeader title="Quick Math">
 
     </UHeader>
 
